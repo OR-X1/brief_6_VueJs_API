@@ -18,7 +18,6 @@ class Rendez_vousControler{
 
 	function save(){
 
-		
 		header('Access-Control-Allow-Methods: POST');
 		$requestBody=json_decode(file_get_contents('php://input'));
 				$groupe = new Mrendez_vous();
@@ -28,8 +27,6 @@ class Rendez_vousControler{
 					echo "not added";
 				}
 				
-				
-		
 	}
 
 	function edit($id)

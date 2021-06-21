@@ -13,7 +13,6 @@ include_once __DIR__.'/../database/DB.php';
 
         function save($date,$typeConsultation,$horaire,$reference){
 
-                      
             $sql='INSERT INTO `rendez-vous`(`date`, `typeConsultation`, `horaire`, `reference`) VALUES ("'.$date.'","'.$typeConsultation.'","'.$horaire.'", "'.$reference.'")';
             $query=DB::connect()->query($sql);
         }
