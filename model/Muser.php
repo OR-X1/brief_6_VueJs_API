@@ -7,8 +7,10 @@ include_once __DIR__.'/../database/DB.php';
 
                 $sql = "select * from user where reference = '$reference'";
                 $query = DB::connect()->query($sql);
-                
-                return $query;
+//                $query->fetch(PDO::FETCH_ASSOC);
+                return $query->rowCount();
+
+//                return $query;
                 
             }
 

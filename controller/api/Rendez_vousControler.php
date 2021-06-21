@@ -3,11 +3,11 @@ include_once __DIR__.'/../../model/Mrendez_vous.php';
 
 class Rendez_vousControler{
 
-	function index()
+	function index($ref)
 	{
 		
 		$rendez_vous = new Mrendez_vous();
-		$groupes=$rendez_vous->getSelect();
+		$groupes=$rendez_vous->getSelect($ref);
 		echo json_encode($groupes);
 		
 	}
@@ -21,7 +21,7 @@ class Rendez_vousControler{
 		header('Access-Control-Allow-Methods: POST');
 		$requestBody=json_decode(file_get_contents('php://input'));
 				$groupe = new Mrendez_vous();
-				if($groupe->save($requestBody[0]->date,$requestBody[0]->typeConsultation,$requestBody[0]->horaire,$requestBody[0]->reference)){
+				if($groupe->save($requestBody->date,$requestBody->typeConsultation,$requestBody->horaire,$requestBody->reference)){
 					echo "added";
 				}else{
 					echo "not added";
@@ -42,21 +42,22 @@ class Rendez_vousControler{
 		
 	}
 
-	function update($id)
+	function update()
 	{
 		header('Access-Control-Allow-Methods: PUT'); 
 		$requestBody= json_decode(file_get_contents('php://input'));
 		
 			$Mrendez_vous = new Mrendez_vous();
-			if($Mrendez_vous->update($requestBody[0]->date,$requestBody[0]->typeConsultation,$requestBody[0]->horaire,$id)){
-				
-				echo "updated";
-			}else{
-				echo "not updated";
-			}
+        $Mrendez_vous->update($requestBody->date,$requestBody->horaire,$requestBody->typeConsultation,$requestBody->id);
+
+//{
+//				
+//				echo "updated";
+//			}else{
+//				echo "not updated";
+//			}
 			
 			// header("location: http://localhost/www/brief_6_VueJs_API/rendez_vous/");
-
 		
 	}
 
