@@ -2,12 +2,11 @@
   <div class="container">
     <div class="row align-items-center  h-100">
       <div class="col-md-10  border mx-auto my-2 align-middle px-5 py-5 shadow rounded">
-        <h2 class="mx-auto mb-5">les créneaux disponibles.</h2>
+        <h2 class="mx-auto mb-5">les Rendez-Vous.</h2>
         <div class="d-flex">
           <p class="w-100">Reference : {{ $route.params.reference }}</p>
           <router-link class="btn btn-outline-danger mx-3" to="/" >deConnect</router-link>
           <router-link class="btn btn-success" :to="{ path: '/ajouterUnCreneau/'+ $route.params.reference}">Ajouter</router-link>
-
         </div>
 
         <table class="table table-borderless">
@@ -16,7 +15,7 @@
               <th scope="col">id</th>
               <th scope="col">Date</th>
               <th scope="col">Horaire</th>
-              <th scope="col">TypeConsultation</th>
+              <th scope="col">Type-Consultation</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -26,9 +25,22 @@
             <tr v-for="result in results" :key="result.id">
               <template v-if="editClient.id == result.id">
                 <td>{{result.id}}</td>
-                <td><input v-model="editClient.date" type="date"></td>
-                <td><input v-model="editClient.horaire" type="text"></td>
-                <td><input v-model="editClient.typeConsultation" type="text"></td>
+                <td><input class="form-control" v-model="editClient.date" type="date"></td>
+                <td>
+                    <select name="horaire" class="form-select" v-model="editClient.horaire" >
+                          <option selected> -- Horaire --</option>
+                          <option value="8 - 9">8 - 9</option>
+                          <option value="9 - 10">9 - 10</option>
+                          <option value="10 - 11">10 - 11</option>
+                          <option value="11 - 12">11 - 12</option>
+
+                          <option value="2 - 3">2 - 3</option>
+                          <option value="3 - 4">3 - 4</option>
+                          <option value="4 - 5">4 - 5</option>
+                          <option value="5 - 6">5 - 6</option>
+                    </select>
+                </td>
+                <td><input class="form-control" v-model="editClient.typeConsultation" type="text"></td>
                 <td class="d-flex">
                   <button class="btn btn-premary" v-on:click="update();">Save</button> &nbsp;
                   <button class="btn btn-warning mx-1"
@@ -76,8 +88,6 @@
           typeConsultation: ''
 
         }
-
-
       }
     },
     mounted: function () {
@@ -147,9 +157,6 @@
             this.editClient.horaire='';
             this.editClient.typeConsultation='';
        },
-
-            
-
     }
   }
 </script>

@@ -12,10 +12,6 @@ class Rendez_vousControler{
 		
 	}
 
-	function page_add(){
-		require_once __DIR__.'/../../view/ajouter_un_créneau.php';
-	}
-
 	function save(){
 
 		header('Access-Control-Allow-Methods: POST');
@@ -50,15 +46,6 @@ class Rendez_vousControler{
 			$Mrendez_vous = new Mrendez_vous();
         $Mrendez_vous->update($requestBody->date,$requestBody->horaire,$requestBody->typeConsultation,$requestBody->id);
 
-//{
-//				
-//				echo "updated";
-//			}else{
-//				echo "not updated";
-//			}
-			
-			// header("location: http://localhost/www/brief_6_VueJs_API/rendez_vous/");
-		
 	}
 
 	function delete($id)
@@ -72,6 +59,14 @@ class Rendez_vousControler{
 
 			echo "deleted";
 		
+	}
+
+	function horaire($date){
+
+		$horaire = new Mrendez_vous();
+			$horaires=$horaire->horaire($date);
+
+			echo json_encode($horaires);
 	}
 
 	

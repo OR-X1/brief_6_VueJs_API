@@ -1,107 +1,131 @@
-<?php
-include_once __DIR__.'/../../model/Mrendez_vous.php';
+<template>
+    <div class="container add ">
+     <h1 class="text-center">Rendez Vous</h1>
+     <div class="alert alert-danger" role="alert" v-if="erreur">
+                {{ erreur }}
+            </div>
+     <form action="">
+     <div class="shadow p-3 mb-5 bg-white rounded">
+     <div class="form-group mb-3 col-10 ms-5 pt-2">
+         <label for="form-label">Date :</label>
+         <input type="date" v-model="date" class="form-control">
+     </div>
+     <div class="form-group mb-3 col-10 ms-5 pt-2">
+        <label for="form-label">Horaire :</label>
+        <select class="form-control" v-model="horaire" >
+               <option selected disabled>choisir un horaire</option>
+                        <option v-for="(duree,index) in DureesS" :key="index" :disabled="duree.etat">{{ duree.val }}</option>
+                        
+        </select>
+    </div>
+    <div class="form-group mb-3 col-10 ms-5 pt-2">
+        <label for="form-label">Type Consultation :</label>
+       <textarea name="" id="" class="form-control" v-model="typeconsult" cols="30" rows="10"></textarea>
+    </div>
+    <div class="mb-3 col-10 ms-5 justify-content-center">
+        <button class="btn "  v-on:click.prevent="Add()" type="submit">Enregistrer</button>
+    </div>
+</div>
+</form>
+ </div>
+</template>
 
-class Rendez_vousControler{
-
-	function index()
-	{
-		// session_start();
-		header('Access-Control-Allow-Origin: *');
-		header('Content-Type: application/json');
-		$rendez_vous = new Mrendez_vous();
-		$groupes=$rendez_vous->getSelect();
-		echo json_encode($groupes);
-		
-		// $horaire = new Mreservation();
-		// $horaire=$horaire->res2CreneauHoraire($groupe,$dateSeance);
-
-		// if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
-		// require_once __DIR__.'/../../view/créneaux_disponibles..php';
-		// }else{
-		// 	header("location: http://localhost/www/brief_6_VueJs_API/");
-		// }
-	}
-
-	function page_add(){
-		require_once __DIR__.'/../../view/ajouter_un_créneau.php';
-	}
-
-	function save(){
-
-		header('Access-Control-Allow-Origin: *');
-		header('Content-Type: application/json');
-		header('Access-Control-Allow-Methods: POST');
-		$requestBody=json_decode(file_get_contents('php://input'));
-		// die($requestBody[0]->date);
-
-		session_start();
-		$i = 0;
-		if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
-			if(isset($_POST['submit'])){
-				$date=$_POST['date'];
-				$typeConsultation=$_POST['typeConsultation'];
-				$horaire=$_POST['horaire'];
-
-				$reference = $_SESSION['user'][0]['reference'];
-
-				$groupe = new Mrendez_vous();
-				$groupe->save($requestBody[0]->date,$requestBody[0]->typeConsultation,$requestBody[0]->horaire,$requestBody[0]->reference);
-				
-				$Horaire = new Mrendez_vous();
-				$Horaires=$Horaire->Horaire($date,$reference);
-
-				
-				require_once __DIR__.'/../../view/ajouter_un_créneau.php';
-				
-				header("location: http://localhost/www/brief_6_VueJs_API/rendez_vous/index");
-				// echo "addd";
-			}
-		}else{
-			header("location: http://localhost/www/brief_6_VueJs_API/");
-		}
-		
-	}
-
-	function edit()
-	{
-		if(isset($_POST['update'])){
-			$id=$_POST['updateID'];
-
-			$groupe = new Mrendez_vous();
-			$groupes=$groupe->edit($id);
-
-			require_once __DIR__.'/../view/updateGroupe.php';
-
-		}
-	}
-
-	function update()
-	{
-		if(isset($_POST['submit'])){
-			$Libelle=$_POST['Libelle'];
-			$effectif=$_POST['effectif'];
-			$id=$_POST['id'];
-
-			$Mrendez_vous = new Mrendez_vous();
-			$Mrendez_vous->update($Libelle,$effectif,$id);
-			
-			header("location: http://localhost/www/brief_6_VueJs_API/rendez_vous/");
-
-		}
-	}
-
-	function delete()
-	{
-		if(isset($_POST['submit'])){
-			$id=$_POST['DeleteID'];
-			$Mrendez_vous = new Mrendez_vous();
-			$Mrendez_vous->delete($id);
-
-			header("location: http://localhost/www/brief_6_VueJs_API/rendez_vous/index");
-
-		}
-		
-	}
-
+<script>
 	
-}
+export default {
+	name:'add',
+	data(){
+		return{
+           
+			date:'',
+			horaire:'choisir un horaire',
+			typeconsult:'',
+            reference: this.$route.params.reference,
+            DureesS: [
+                { val: "08:00-09-00", etat: false },
+                { val: "09:00-10-00", etat: false },
+                { val: "10:00-11-00", etat: false },
+                { val: "11:00-12-00", etat: false },
+                { val: "13:00-14-00", etat: false },
+                { val: "14:00-15-00", etat: false },
+                { val: "15:00-16-00", etat: false },
+                { val: "16:00-17-00", etat: false },
+                { val: "17:00-18-00", etat: false },
+            ],
+            Durees: [],
+            erreur: "",
+		}
+		
+	},
+    methods: {
+        Add(){
+            
+            	fetch("http://localhost/brief6/Rendezvous/create", {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					date: this.date,
+                    horaire: this.horaire,
+                    typeconsult: this.typeconsult,
+                    reference :this.reference
+				})
+			})
+            .then(() => {
+				 this.$router.push("/Rendezvous/"+this.reference)
+				
+			})
+			.catch(function(err){
+				console.log(err);
+			})
+
+        },
+       async getTimes(dateP){
+           console.log("rrrrr");
+            const response= await fetch("http://localhost/brief6/Rendezvous/getData/"+dateP);
+           const data = await response.json();
+           this.Durees=data;
+           console.log(data);
+
+        }
+     
+    },
+    watch:{
+        date: async function(val){
+            await this.getTimes(val);
+            if(this.DureesS.length == this.Durees.length){
+                this.erreur="il reste plus de rdv pour cette date";
+            }
+            else{
+                 this.erreur="";
+            }
+            this.horaire="choisir un horaire";
+            for (var i = 0; i < this.DureesS.length; i++) {
+                    this.DureesS[i].etat = false;
+                    for (var j = 0; j < this.Durees.length; j++) {
+                        if (this.DureesS[i].val == this.Durees[j].horaire) {
+                            console.log(this.DureesS[i].etat);
+                            this.DureesS[i].etat = true;
+                            console.log(i + "///eg///" + this.DureesS[i].etat);
+                            // break;
+                        }
+                    }
+                }
+            
+
+
+        }
+    }
+ 
+  
+    }
+    
+    
+	
+
+</script>
+
+<style>
+
+</style>

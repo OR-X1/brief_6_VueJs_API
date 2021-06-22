@@ -39,6 +39,14 @@ include_once __DIR__.'/../database/DB.php';
             $sql="delete from `rendez-vous` where id=$id";
             $query=DB::connect()->query($sql);
         }
+
+        function horaire($date){
+            $sql="SELECT distinct `horaire` FROM `rendez-vous` WHERE `date`= '$date'";
+
+            $query=DB::connect()->query($sql);
+            return $query->fetchAll();
+            
+        }
     }
 
 
