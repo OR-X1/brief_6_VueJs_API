@@ -14,7 +14,7 @@
                         <option selected disabled>-- Horaire --</option>
                         <option v-for="(duree,index) in DureesS" :key="index" :disabled="duree.etat">{{ duree.val }}</option>
                     </select><br>
-                      
+                    
                     text :
                     <textarea class="form-control" name="typeConsultation" v-model="typeConsultation" id="" cols="10" rows="5"></textarea><br>
                     
@@ -35,19 +35,18 @@ data(){
 			typeConsultation:'',
             reference:'',
             DureesS: [
-                { val: "08:00-09-00", etat: false },
-                { val: "09:00-10-00", etat: false },
-                { val: "10:00-11-00", etat: false },
-                { val: "11:00-12-00", etat: false },
+                { val: "08:00 - 09-00", etat: false },
+                { val: "09:00 - 10-00", etat: false },
+                { val: "10:00 - 11-00", etat: false },
+                { val: "11:00 - 12-00", etat: false },
                 
-                { val: "14:00-15-00", etat: false },
-                { val: "15:00-16-00", etat: false },
-                { val: "16:00-17-00", etat: false },
-                { val: "17:00-18-00", etat: false },
+                { val: "14:00 - 15-00", etat: false },
+                { val: "15:00 - 16-00", etat: false },
+                { val: "16:00 - 17-00", etat: false },
+                { val: "17:00 - 18-00", etat: false },
             ],
             Durees: [],
             erreur: "",
-			
 		}
 },
 methods :{
@@ -65,15 +64,12 @@ methods :{
 				})
 			});
 			await(this.$router.push( "/creneauxDisponibles/"+ this.$route.params.reference));
-				
-
+			
         },
         async getTimes(dateP){
-           console.log("rrrrr");
             const response= await fetch("http://localhost/www/brief_6_VueJs_API/rendez_vous/horaire/"+dateP);
            const data = await response.json();
            this.Durees=data;
-           console.log(data);
 
         }
 },
@@ -87,6 +83,7 @@ watch:{
                  this.erreur="";
             }
             this.horaire="-- Horaire --";
+
             for (var i = 0; i < this.DureesS.length; i++) {
                 this.DureesS[i].etat = false;
                 for (var j = 0; j < this.Durees.length; j++) {
@@ -96,6 +93,7 @@ watch:{
                     }
                 }
             }
+
         }
     }
 

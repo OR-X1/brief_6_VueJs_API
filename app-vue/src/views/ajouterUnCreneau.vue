@@ -1,7 +1,7 @@
 <template>
-  
+
     <AjouterUnCreneau/>
- 
+
 </template>
 
 <script>

@@ -41,7 +41,7 @@ include_once __DIR__.'/../database/DB.php';
         }
 
         function horaire($date){
-            $sql="SELECT distinct `horaire` FROM `rendez-vous` WHERE `date`= '$date'";
+            $sql="SELECT  `horaire` FROM `rendez-vous` WHERE `date`= '$date'";
 
             $query=DB::connect()->query($sql);
             return $query->fetchAll();

@@ -23,21 +23,22 @@
           <tbody>
 
             <tr v-for="result in results" :key="result.id">
+              
               <template v-if="editClient.id == result.id">
                 <td>{{result.id}}</td>
                 <td><input class="form-control" v-model="editClient.date" type="date"></td>
                 <td>
                     <select name="horaire" class="form-select" v-model="editClient.horaire" >
                           <option selected> -- Horaire --</option>
-                          <option value="8 - 9">8 - 9</option>
-                          <option value="9 - 10">9 - 10</option>
-                          <option value="10 - 11">10 - 11</option>
-                          <option value="11 - 12">11 - 12</option>
-
-                          <option value="2 - 3">2 - 3</option>
-                          <option value="3 - 4">3 - 4</option>
-                          <option value="4 - 5">4 - 5</option>
-                          <option value="5 - 6">5 - 6</option>
+                          <option value="08:00 - 09-00">08:00 - 09-00</option>
+                          <option value="09:00 - 10-00">09:00 - 10-00</option>
+                          <option value="10:00 - 11-00">10:00 - 11-00</option>
+                          <option value="11:00 - 12-00">11:00 - 12-00</option>
+                          
+                          <option value="14:00 - 15-00">14:00 - 15-00</option>
+                          <option value="15:00 - 16-00">15:00 - 16-00</option>
+                          <option value="16:00 - 17-00">16:00 - 17-00</option>
+                          <option value="17:00 - 18-00">17:00 - 18-00</option>
                     </select>
                 </td>
                 <td><input class="form-control" v-model="editClient.typeConsultation" type="text"></td>
@@ -54,7 +55,7 @@
                 <td>{{ result.typeConsultation }}</td>
                 <td class="d-flex">
                   <button type="submit" v-on:click="edit(result.id)" class="btn btn-warning">Update</button>
-                  <button type="submit" v-on:click="getid(result.id);del()" class="btn btn-danger mx-1">Delete</button>
+                  <button type="submit" v-on:click="del(result.id)" class="btn btn-danger mx-1">Delete</button>
 
                 </td>
               </template>
@@ -76,11 +77,11 @@
     data() {
       return {
         results: [],
-        idRendezVous: '',
+        // idRendezVous: '',
 
         ref:this.$route.params.reference ,
         
-        editReser: '',
+        // editReser: '',
         editClient: {
           id: '',
           date: '',
@@ -101,13 +102,13 @@
           .then(data => this.results = data)
           .catch(err => console.log(err.message))
       },
-      getid(x) {
-        this.idRendezVous = x;
-        console.log(this.idRendezVous);
+      // getid(x) {
+      //   this.idRendezVous = x;
+      //   // console.log(this.idRendezVous);
 
-      },
-      del() {
-        fetch("http://localhost/www/brief_6_VueJs_API/rendez_vous/delete/" + this.idRendezVous, {
+      // },
+      del(idRendezV) {
+        fetch("http://localhost/www/brief_6_VueJs_API/rendez_vous/delete/" + idRendezV, {
             method: "DELETE",
 
           })
@@ -118,7 +119,7 @@
         fetch('http://localhost/www/brief_6_VueJs_API/rendez_vous/edit/'+x)
         .then(response => response.json())
         .then(data =>{
-            this.editReser=data[0].id;
+            // this.editReser=data[0].id;
             this.editClient.id=data[0].id;
             this.editClient.date=data[0].date;
             this.editClient.horaire=data[0].horaire;
@@ -127,7 +128,7 @@
     },
 
     cancel(){
-          this.editReser='';
+          // this.editReser='';
           this.editClient.id=''
             this.editClient.date='';
             this.editClient.horaire='';
@@ -135,7 +136,7 @@
     },
 
      async update(){
-        console.log(JSON.stringify(this.editClient));
+        // console.log(JSON.stringify(this.editClient));
        await fetch('http://localhost/www/brief_6_VueJs_API/rendez_vous/update',{
             method: 'PUT',
             headers:{
@@ -151,7 +152,7 @@
         });
        
      await this.getAll();
-            this.editReser='';
+            // this.editReser='';
             this.editClient.id='';
             this.editClient.date='';
             this.editClient.horaire='';
